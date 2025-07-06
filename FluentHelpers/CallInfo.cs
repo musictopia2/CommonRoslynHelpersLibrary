@@ -1,5 +1,5 @@
 ﻿namespace CommonRoslynHelpersLibrary.FluentHelpers;
-internal struct CallInfo
+public struct CallInfo
 {
     public InvocationExpressionSyntax Invocation;
     public IMethodSymbol MethodSymbol;

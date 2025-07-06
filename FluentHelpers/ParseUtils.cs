@@ -1,8 +1,8 @@
 ﻿namespace CommonRoslynHelpersLibrary.FluentHelpers;
-internal class ParseUtils
+public class ParseUtils
 {
     private static readonly List<CallInfo> _emptyCallsList = [];
-    internal static IReadOnlyList<CallInfo> FindCallsOfMethodWithName(
+    public static IReadOnlyList<CallInfo> FindCallsOfMethodWithName(
         ParseContext context, SyntaxNode node, string methodName)
     {
         // Oh man getting all fluent calls of a method is really not that easy... try to use the symbol to find them
@@ -58,7 +58,7 @@ internal class ParseUtils
             return null;
         }
     }
-    internal static IReadOnlyList<CallInfo> FindCallsOfMethodInConfigLambda(
+    public static IReadOnlyList<CallInfo> FindCallsOfMethodInConfigLambda(
         ParseContext context,
         CallInfo call,
         string name,
@@ -71,7 +71,7 @@ internal class ParseUtils
             return _emptyCallsList;
         }
         int toUse;
-        if (call.ArgumentList.Arguments.Count() < argumentIndex + 1)
+        if (call.ArgumentList.Arguments.Count < argumentIndex + 1)
         {
             toUse = call.ArgumentList.Arguments.Count - 1;
         }
@@ -82,7 +82,7 @@ internal class ParseUtils
         var configLambda = call.ArgumentList.Arguments[toUse];
         return FindCallsOfMethodWithName(context, configLambda, name);
     }
-    internal static string GetStringContent(CallInfo info, int index = 0) //needs over load since it may not be a single one (when it has several properties).
+    public static string GetStringContent(CallInfo info, int index = 0) //needs over load since it may not be a single one (when it has several properties).
     {
         int toUse;
         var a = info.ArgumentList;
@@ -106,7 +106,7 @@ internal class ParseUtils
         }
         //this means i can get any information i want.  can parse to something else if i want.
     }
-    internal static string GetStringContent(IReadOnlyList<CallInfo> list, int index = 0) //to get the string content as well since this is how its done.
+    public static string GetStringContent(IReadOnlyList<CallInfo> list, int index = 0) //to get the string content as well since this is how its done.
     {
         var a = list.Single();
         return GetStringContent(a, index);
@@ -124,7 +124,7 @@ internal class ParseUtils
         }
     }
     //these 2 are added.  so if we want to know whether an option was chosen and if so, capture one additional value, can be done.
-    internal static bool PropertyHasExpectedValueAlone(IReadOnlyList<CallInfo> calls, IPropertySymbol p, ITypeSymbol classSymbol)
+    public static bool PropertyHasExpectedValueAlone(IReadOnlyList<CallInfo> calls, IPropertySymbol p, ITypeSymbol classSymbol)
     {
         foreach (var call in calls)
         {
@@ -142,7 +142,7 @@ internal class ParseUtils
         }
         return false;
     }
-    internal static (bool Shown, string Value) PropertyGetExtraInfo(IReadOnlyList<CallInfo> calls, IPropertySymbol p, ITypeSymbol classSymbol)
+    public static (bool Shown, string Value) PropertyGetExtraInfo(IReadOnlyList<CallInfo> calls, IPropertySymbol p, ITypeSymbol classSymbol)
     {
         foreach (var call in calls)
         {

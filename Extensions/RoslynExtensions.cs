@@ -71,7 +71,7 @@ public static class RoslynExtensions
         BasicList<INamedTypeSymbol> output = [];
         foreach (var item in list)
         {
-            if (item.IsGenericType && item.TypeArguments.Count() == 1 && item.Name == interfaceName)
+            if (item.IsGenericType && item.TypeArguments.Length == 1 && item.Name == interfaceName)
             {
                 output.Add((INamedTypeSymbol)item.TypeArguments.Single());
             }
@@ -86,7 +86,7 @@ public static class RoslynExtensions
             }
             foreach (var f in others)
             {
-                if (f.IsGenericType && f.TypeArguments.Count() == 1 && f.Name == interfaceName)
+                if (f.IsGenericType && f.TypeArguments.Length == 1 && f.Name == interfaceName)
                 {
                     output.Add((INamedTypeSymbol)f.TypeArguments.Single());
                 }
@@ -137,7 +137,7 @@ public static class RoslynExtensions
         {
             return null;
         }
-        if (others.TypeArguments.Count() is not 1)
+        if (others.TypeArguments.Length is not 1)
         {
             return null;
         }
@@ -303,7 +303,7 @@ public static class RoslynExtensions
         T? output;
         if (property.Index == -1)
         {
-            if (attribute.NamedArguments.Count() == 0)
+            if (attribute.NamedArguments.Length == 0)
             {
                 return default;
             }
@@ -315,7 +315,7 @@ public static class RoslynExtensions
             }
             return output;
         }
-        if (attribute.ConstructorArguments.Count() - 1 < property.Index)
+        if (attribute.ConstructorArguments.Length - 1 < property.Index)
         {
             //i think best to do this way so if there are more than one required, won't also cause problems.
             return default;
@@ -448,8 +448,8 @@ public static class RoslynExtensions
     {
         string firsts = ourClass.ToString();
         string extras = additionalText;
-        int startAt = firsts.IndexOf("{");
-        int endAt = firsts.LastIndexOf("}");
+        int startAt = firsts.IndexOf('{');
+        int endAt = firsts.LastIndexOf('}');
         string toReplace = firsts.Substring(startAt, endAt - startAt - 1);
         string newText = $"{toReplace}{extras}";
         string results = firsts.Replace(toReplace, newText);
@@ -556,7 +556,7 @@ public static class RoslynExtensions
         return false;
     }
     //new extensions.  this helps with getting all public properties and methods.
-    private static IEnumerable<INamedTypeSymbol> GetAllParents(this INamedTypeSymbol symbol)
+    private static BasicList<INamedTypeSymbol> GetAllParents(this INamedTypeSymbol symbol)
     {
         BasicList<INamedTypeSymbol> output = [symbol];
         INamedTypeSymbol temps = symbol;
@@ -688,7 +688,7 @@ public static class RoslynExtensions
             if (item.Name == methodNameExpected && item.Kind == SymbolKind.Method)
             {
                 IMethodSymbol output = (IMethodSymbol)item;
-                if (output.Parameters.Count() == parametersExpected)
+                if (output.Parameters.Length == parametersExpected)
                 {
                     return output;
                 }
@@ -721,12 +721,12 @@ public static class RoslynExtensions
     }
     public static string GetGenericString(this INamedTypeSymbol symbol)
     {
-        if (symbol.TypeArguments.Count() == 0)
+        if (symbol.TypeArguments.Length == 0)
         {
             return "";
         }
         StringBuilder builder = new();
-        builder.Append("<");
+        builder.Append('<');
         int index = 0;
         foreach (var item in symbol.TypeArguments)
         {
@@ -737,7 +737,7 @@ public static class RoslynExtensions
             builder.Append(item.Name);
             index++;
         }
-        builder.Append(">");
+        builder.Append('>');
         return builder.ToString();
     }
     public static bool IsTypeEqual(this ITypeSymbol firsts, ITypeSymbol seconds)
